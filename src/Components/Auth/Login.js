@@ -1,35 +1,36 @@
 import React, { PureComponent } from "react";
 import { Redirect } from "react-router-dom";
-import LoginForm from "./LoginForm";
-import Alert from "../Alert";
+import AuthForm from "./AuthForm";
+import Alert from "./Alert";
 
 class Login extends PureComponent {
   state = {
-    user: "",
-    password: "",
     alertWarn: false
   };
-  onSubmitLogin = e => {
-    e.preventDefault();
-    const { user, password } = this.state;
-    const getUsersAccounts = JSON.parse(localStorage.getItem("accounts"));
-    const isUserExist =
-      getUsersAccounts &&
-      getUsersAccounts.find(
-        account => account.user === user && account.password === password
+
+  onSubmitLogin = ({ login, password }) => {
+    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
+    const userPayload =
+      usersAccounts &&
+      usersAccounts.find(
+        account => account.login === login && account.password === password
       );
-    if (isUserExist) {
+
+    if (userPayload) {
       //Set currentUser object in LocalStorage
-      localStorage.setItem("currentUser", JSON.stringify(isUserExist));
+      localStorage.setItem("currentUser", JSON.stringify(userPayload));
+
       //Set logged status in LocalStorage
       localStorage.setItem("logged", true);
+
       this.props.history.push("/profile");
       alert("You have logged succesful");
     } else {
+      //timeout fix
       this.setState({ alertWarn: true });
       setTimeout(() => {
         this.setState({ alertWarn: false });
-      }, 2000);
+      }, 3000);
     }
   };
 
@@ -42,16 +43,16 @@ class Login extends PureComponent {
     return (
       <>
         <div className="row container">
-        {this.state.alertWarn && (
+          {this.state.alertWarn && (
             <div className="col s12">
-            <Alert type="alert_warn" text="Username or password isn't correct!"/>
-          </div>
+              <Alert
+                type="alert_warn"
+                text="Username or password isn't correct!"
+              />
+            </div>
           )}
           <h5 style={{ textAlign: "center", color: "grey" }}>Login</h5>
-          <LoginForm
-            onChange={this.onChange}
-            onSubmitLogin={this.onSubmitLogin}
-          />
+          <AuthForm onSubmit={this.onSubmitLogin} />
         </div>
         {isLogged && <Redirect to="/profile" />}
       </>

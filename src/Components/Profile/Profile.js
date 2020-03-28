@@ -1,22 +1,21 @@
-import React, { PureComponent } from "react";
-import Tasks from "./Tasks/Tasks";
+import React from "react";
+import Tasks from "./Tasks/TasksList";
 import { Redirect } from "react-router-dom";
 
-class Profile extends PureComponent {
-  render() {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    return (
-      <>
-        <div className="container">
-          <h4 style={{ textAlign: "center", color: "grey" }}>
-            Welcome home {currentUser && currentUser.user}!
-          </h4>{" "}
-          <Tasks />
-        </div>
-        {!currentUser && <Redirect to="/login" />}
-      </>
-    );
-  }
-}
+const Profile = () => {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  return (
+    <>
+      <div className="container">
+        <h4 style={{ textAlign: "center", color: "grey" }}>
+          Welcome home <span style={{color: 'lightcoral'}}>{currentUser && currentUser.user}</span>!
+        </h4>{" "}
+        <Tasks />
+      </div>
+      {!currentUser && <Redirect to="/login" />}
+    </>
+  );
+};
 
 export default Profile;

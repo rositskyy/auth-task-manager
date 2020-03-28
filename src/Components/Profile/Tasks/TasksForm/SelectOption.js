@@ -11,7 +11,7 @@ const SelectOption = ({ handleChange, selectValue }) => {
   return (
     <div>
       <select
-        className="browser-default"
+        className="browser-default input-field"
         onChange={handleChange}
         value={selectValue}
       >

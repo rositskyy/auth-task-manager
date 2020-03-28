@@ -16,7 +16,7 @@ class SendTaskForm extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    // alert(`Task have been sent to ${this.state.receiver} succesful!`)
+    alert(`Task have been sent to ${this.state.receiver} succesful!`)
     this.addSentTaskToLocalStorage("accounts");
   };
 

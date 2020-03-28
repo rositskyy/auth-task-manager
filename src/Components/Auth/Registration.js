@@ -1,41 +1,46 @@
 import React, { PureComponent } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { Redirect } from "react-router-dom";
-import RegistrationForm from "./RegistrationForm";
-import Alert from "../Alert";
+import AuthForm from "./AuthForm";
+import Alert from "./Alert";
 
 class Registration extends PureComponent {
   state = {
-    id: null,
-    user: "",
-    password: "",
     alertWarn: false
   };
+
+  componentWillUnmount() {
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId);
+    }
+  }
+
+  timeoutId = null;
+
   onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  onSubmitRegister = e => {
-    e.preventDefault();
-    const { user, password } = this.state;
+
+  onSubmitRegister = ({login, password}) => {
     const newUser = {
       id: uuidv4(),
-      user,
+      login,
       password,
       tasks: [],
       receivedTasks: []
     };
 
     const storage = JSON.parse(localStorage.getItem("accounts"));
-    const existUserName = storage && storage.find(item => item.user === user);
+    const existUserName = storage && storage.find(item => item.login === login);
     if (existUserName) {
       this.setState({ alertWarn: true });
-      setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         this.setState({ alertWarn: false });
       }, 2000);
     } else {
       this.addToLocalStorageArray("accounts", newUser);
 
-      this.setState({ user: "", password: "" });
+      this.setState({ login: "", password: "" });
       this.props.history.push("/login");
       alert("Account created succesfull, now you can log in");
     }
@@ -62,9 +67,9 @@ class Registration extends PureComponent {
             </div>
           )}
           <h5 style={{ textAlign: "center", color: "grey" }}>Registration</h5>
-          <RegistrationForm
-            onChange={this.onChange}
-            onSubmitRegister={this.onSubmitRegister}
+          <AuthForm
+            // onChange={this.onChange}
+            onSubmit={this.onSubmitRegister}
           />
         </div>
         {isLogged && <Redirect to="/profile" />}
