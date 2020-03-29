@@ -60,6 +60,39 @@ class API {
     }
     localStorage.setItem("accounts", JSON.stringify(accounts));
   }
+
+  static deleteTask(id) {
+    //Update current storage
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    currentUser.tasks = currentUser.tasks.filter(item => item.id !== id);
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+    // Update main storage
+    const accounts = JSON.parse(localStorage.getItem("accounts"));
+    const ids = accounts.map(e => e.id);
+    const elementIndex = ids.indexOf(currentUser.id);
+    if (elementIndex !== -1) {
+      accounts[elementIndex] = currentUser;
+    }
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+  }
+
+  static deleteReceivedTask(id) {
+    //Update current storage
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    currentUser.receivedTasks = currentUser.receivedTasks.filter(
+      item => item.id !== id
+    );
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    // Update main storage
+    const accounts = JSON.parse(localStorage.getItem("accounts"));
+    const ids = accounts.map(e => e.id);
+    const elementIndex = ids.indexOf(currentUser.id);
+    if (elementIndex !== -1) {
+      accounts[elementIndex] = currentUser;
+    }
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+  }
 }
 
 export default API;

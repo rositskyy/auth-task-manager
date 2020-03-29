@@ -4,72 +4,53 @@ import AddTaskForm from "./TasksForm/AddTaskForm";
 import Tasks from "./Tasks";
 import PopupButton from "./TasksForm/PopupButton";
 import { connect } from "react-redux";
-import { addTask } from "../../../store/actions/userAction";
+import {
+  addTask,
+  deleteTask,
+  deleteReceivedTask
+} from "../../../store/actions/userAction";
 
 class TasksList extends PureComponent {
-  state = {
-    currentUser: {},
-    tasks: []
-  };
-  componentDidMount() {
-    const data = JSON.parse(localStorage.getItem("currentUser"));
-    const usertasks = JSON.parse(localStorage.getItem("currentUser")).tasks;
-    this.setState({ currentUser: data, tasks: usertasks });
-  }
+  // state = {
+  //   currentUser: {}
+  // };
+  // componentDidMount() {
+  //   const data = JSON.parse(localStorage.getItem("currentUser"));
+  //   this.setState({ currentUser: data });
+  // }
 
   onSubmit = ({ task }) => {
     const newTask = { id: uuidv4(), task };
     this.props.addTask(newTask);
-    //fix
+    // const updatedUser = JSON.parse(localStorage.getItem("currentUser"));
+    // this.setState({ currentUser: updatedUser });
   };
 
   onDeleteMyTask = id => {
-    //Update current storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    currentUser.tasks = currentUser.tasks.filter(item => item.id !== id);
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    this.setState({ currentUser });
-    // Update main storage
-    const accounts = JSON.parse(localStorage.getItem("accounts"));
-    const ids = accounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      accounts[elementIndex] = currentUser;
-    }
-    localStorage.setItem("accounts", JSON.stringify(accounts));
+    this.props.deleteTask(id);
+    // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    // this.setState({ currentUser });
   };
 
   onDeleteReceivedTask = id => {
-    //Update current storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    currentUser.receivedTasks = currentUser.receivedTasks.filter(
-      item => item.id !== id
-    );
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
-    this.setState({ currentUser });
-    // Update main storage
-    const accounts = JSON.parse(localStorage.getItem("accounts"));
-    const ids = accounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      accounts[elementIndex] = currentUser;
-    }
-    localStorage.setItem("accounts", JSON.stringify(accounts));
+    this.props.deleteReceivedTask(id);
+    // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    // this.setState({ currentUser });
   };
   render() {
-    const { currentUser } = this.state;
+    // const { currentUser } = this.state;
     return (
       <>
         <div className="row container">
           <Tasks
             onDelete={this.onDeleteMyTask}
-            tasks={currentUser.tasks}
+            tasks={this.props.tasks}
             label="My Tasks"
           />
           <Tasks
             onDelete={this.onDeleteReceivedTask}
             label="Received Tasks"
-            tasks={currentUser.receivedTasks}
+            tasks={this.props.receivedTasks}
           />
           <AddTaskForm onSubmit={this.onSubmit} />
         </div>
@@ -79,4 +60,11 @@ class TasksList extends PureComponent {
   }
 }
 
-export default connect(null, { addTask })(TasksList);
+const mapStateToProps = state => ({
+  tasks: state.userReducer.tasks,
+  receivedTasks: state.userReducer.receivedTasks,
+})
+
+export default connect(mapStateToProps, { addTask, deleteTask, deleteReceivedTask })(
+  TasksList
+);

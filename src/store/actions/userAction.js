@@ -1,4 +1,10 @@
-import { USER_LOGIN, USER_LOGOUT, ADD_TASK } from "./actiontypes";
+import {
+  USER_LOGIN,
+  USER_LOGOUT,
+  ADD_TASK,
+  DELETE_TASK,
+  DELETE_RECEIVED_TASK
+} from "./actiontypes";
 import API from "../../API";
 
 export const userLogin = ({ login, password }) => dispatch => {
@@ -36,7 +42,23 @@ export const restoreSession = () => dispatch => {
 export const addTask = newTask => dispatch => {
   API.addTask(newTask);
   dispatch({
-      type: ADD_TASK,
-      payload: newTask
-  })
+    type: ADD_TASK,
+    payload: newTask
+  });
+};
+
+export const deleteTask = id => dispatch => {
+  API.deleteTask(id);
+  dispatch({
+    type: DELETE_TASK,
+    payload: id
+  });
+};
+
+export const deleteReceivedTask = id => dispatch => {
+  API.deleteReceivedTask(id);
+  dispatch({
+    type: DELETE_RECEIVED_TASK,
+    payload: id
+  });
 };

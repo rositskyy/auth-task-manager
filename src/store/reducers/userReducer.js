@@ -2,7 +2,9 @@ import {
   USER_LOGOUT,
   USER_LOGIN,
   LOGIN_FAILED,
-  ADD_TASK
+  ADD_TASK,
+  DELETE_TASK,
+  DELETE_RECEIVED_TASK
 } from "../actions/actiontypes";
 
 const initialState = {
@@ -18,7 +20,9 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: action.payload,
-        loginStatus: true
+        loginStatus: true,
+        tasks: action.payload.tasks,
+        receivedTasks: action.payload.receivedTasks
       };
 
     case USER_LOGOUT:
@@ -28,7 +32,17 @@ const userReducer = (state = initialState, action) => {
     case ADD_TASK:
       return {
         ...state,
-        tasks: [...state.currentUser.tasks, action.payload]
+        tasks: [...state.tasks, action.payload]
+      };
+    case DELETE_TASK:
+      return {
+        ...state,
+        tasks: state.tasks.filter(item=> item.id !== action.payload)
+      };
+    case DELETE_RECEIVED_TASK:
+      return {
+        ...state,
+        receivedTasks: state.receivedTasks.filter(item=> item.id !== action.payload)
       };
     default:
       return state;
