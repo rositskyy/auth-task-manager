@@ -28,7 +28,8 @@ class API {
   static register({ login, password }) {
     const accountsPayload = localStorage.getItem("accounts");
     const accounts = accountsPayload ? JSON.parse(accountsPayload) : [];
-    const existUserName = accounts && accounts.find(item => item.login === login);
+    const existUserName =
+      accounts && accounts.find(item => item.login === login);
     if (existUserName) {
       return false;
     }
@@ -44,8 +45,9 @@ class API {
     return true;
   }
 
-  static addTask(newTask) {
+  static addTask(task) {
     // Saving current user
+    const newTask = { id: uuidv4(), task, date: new Date() };
     const user = JSON.parse(localStorage.getItem("currentUser"));
     user.tasks.unshift(newTask);
     localStorage.setItem("currentUser", JSON.stringify(user));
@@ -58,6 +60,7 @@ class API {
       accounts[elementIndex] = user;
     }
     localStorage.setItem("accounts", JSON.stringify(accounts));
+    return newTask;
   }
 
   static deleteTask(id) {
@@ -93,18 +96,29 @@ class API {
     localStorage.setItem("accounts", JSON.stringify(accounts));
   }
 
-  static sendTask(newTask, receiver) {
-    const existing = JSON.parse(localStorage.getItem("accounts"));
+  static sendTask(task, receiver, author) {
+    const accounts = JSON.parse(localStorage.getItem("accounts"));
     // Send to user [foundUser]
-    const foundUser = existing.find(item => item.login === receiver);
+    const foundUser = accounts.find(item => item.login === receiver);
+    const newTask = {
+      id: uuidv4(),
+      task,
+      author,
+      date: new Date()
+    };
     foundUser.receivedTasks.unshift(newTask);
     // Update accounts info
-    const ids = existing.map(e => e.id);
+    const ids = accounts.map(e => e.id);
     const elementIndex = ids.indexOf(foundUser.id);
     if (elementIndex !== -1) {
-      existing[elementIndex] = foundUser;
+      accounts[elementIndex] = foundUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(existing));
+    localStorage.setItem("accounts", JSON.stringify(accounts));
+  }
+
+  static closeCurrentSession() {
+    localStorage.removeItem("logged");
+    localStorage.removeItem("currentUser");
   }
 }
 

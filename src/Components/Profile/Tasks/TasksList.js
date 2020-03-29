@@ -1,5 +1,4 @@
 import React from "react";
-import { v4 as uuidv4 } from "uuid";
 import AddTaskForm from "./TasksForm/AddTaskForm";
 import Tasks from "./Tasks";
 import PopupButton from "./TasksForm/PopupButton";
@@ -18,12 +17,11 @@ const TasksList = ({
   receivedTasks
 }) => {
   const onSubmit = ({ task }) => {
-    const newTask = { id: uuidv4(), task, date: new Date() };
-    addTask(newTask);
+    addTask(task);
   };
 
-  const onDeleteMyTask = id => {
-    deleteTask(id);
+  const onDeleteMyTask = (id) => {
+    deleteTask(id)
   };
 
   const onDeleteReceivedTask = id => {

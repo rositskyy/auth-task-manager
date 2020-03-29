@@ -20,8 +20,7 @@ export const userLogin = ({ login, password }) => dispatch => {
 
 export const userLogout = () => dispatch => {
   if (window.confirm("Want log out?")) {
-    localStorage.removeItem("logged");
-    localStorage.removeItem("currentUser");
+    API.closeCurrentSession();
     dispatch({
       type: USER_LOGOUT
     });
@@ -45,15 +44,15 @@ export const restoreSession = () => dispatch => {
   }
 };
 
-export const addTask = newTask => dispatch => {
-  API.addTask(newTask);
+export const addTask = task => dispatch => {
+  const newTask = API.addTask(task);
   dispatch({
     type: ADD_TASK,
     payload: newTask
   });
 };
 
-export const deleteTask = (id) => dispatch => {
+export const deleteTask = id => dispatch => {
   API.deleteTask(id);
   dispatch({
     type: DELETE_TASK,
@@ -69,6 +68,6 @@ export const deleteReceivedTask = id => dispatch => {
   });
 };
 
-export const sendTask = (newTask, receiver) => dispatch => {
-  API.sendTask(newTask, receiver);
+export const sendTask = (task, receiver, author) => dispatch => {
+  API.sendTask(task, receiver, author);
 };

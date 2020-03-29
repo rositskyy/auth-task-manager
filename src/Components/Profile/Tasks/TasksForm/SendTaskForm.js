@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import SelectOption from "./SelectOption";
-import { v4 as uuidv4 } from "uuid";
 import { connect } from "react-redux";
 import { sendTask } from "../../../../store/actions/userAction";
 
@@ -10,15 +9,14 @@ const SendTaskForm = ({ sendTask, currentUser }) => {
 
   const onSubmit = e => {
     e.preventDefault();
-    const newTask = {
-      id: uuidv4(),
-      task,
-      author: currentUser.login,
-      date: new Date()
-    };
-    sendTask(newTask, receiver);
-    alert(`Task have been sent to ${receiver} succesful!`);
-    setTask("");
+    if (receiver !== "select") {
+      const author = currentUser.login;
+      sendTask(task, receiver, author);
+      alert(`Task have been sent to ${receiver} succesful!`);
+      setTask("");
+    } else {
+      alert("You cant send tasks because you didn't select the user");
+    }
   };
 
   return (

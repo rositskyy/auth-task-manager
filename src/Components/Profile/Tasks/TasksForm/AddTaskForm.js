@@ -8,7 +8,7 @@ const AddTaskForm = ({ onSubmit }) => {
         onSubmit={e => {
           e.preventDefault();
           onSubmit({ task });
-          setTask("");
+          setTask('')
         }}
         className="col s12"
       >
