@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { v4 as uuidv4 } from "uuid";
 import AddTaskForm from "./TasksForm/AddTaskForm";
 import Tasks from "./Tasks";
@@ -10,61 +10,48 @@ import {
   deleteReceivedTask
 } from "../../../store/actions/userAction";
 
-class TasksList extends PureComponent {
-  // state = {
-  //   currentUser: {}
-  // };
-  // componentDidMount() {
-  //   const data = JSON.parse(localStorage.getItem("currentUser"));
-  //   this.setState({ currentUser: data });
-  // }
-
-  onSubmit = ({ task }) => {
+const TasksList = ({
+  addTask,
+  deleteTask,
+  deleteReceivedTask,
+  tasks,
+  receivedTasks
+}) => {
+  const onSubmit = ({ task }) => {
     const newTask = { id: uuidv4(), task };
-    this.props.addTask(newTask);
-    // const updatedUser = JSON.parse(localStorage.getItem("currentUser"));
-    // this.setState({ currentUser: updatedUser });
+    addTask(newTask);
   };
 
-  onDeleteMyTask = id => {
-    this.props.deleteTask(id);
-    // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    // this.setState({ currentUser });
+  const onDeleteMyTask = id => {
+    deleteTask(id);
   };
 
-  onDeleteReceivedTask = id => {
-    this.props.deleteReceivedTask(id);
-    // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    // this.setState({ currentUser });
+  const onDeleteReceivedTask = id => {
+    deleteReceivedTask(id);
   };
-  render() {
-    // const { currentUser } = this.state;
-    return (
-      <>
-        <div className="row container">
-          <Tasks
-            onDelete={this.onDeleteMyTask}
-            tasks={this.props.tasks}
-            label="My Tasks"
-          />
-          <Tasks
-            onDelete={this.onDeleteReceivedTask}
-            label="Received Tasks"
-            tasks={this.props.receivedTasks}
-          />
-          <AddTaskForm onSubmit={this.onSubmit} />
-        </div>
-        <PopupButton />
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="row container">
+        <Tasks onDelete={onDeleteMyTask} tasks={tasks} label="My Tasks" />
+        <Tasks
+          onDelete={onDeleteReceivedTask}
+          label="Received Tasks"
+          tasks={receivedTasks}
+        />
+        <AddTaskForm onSubmit={onSubmit} />
+      </div>
+      <PopupButton />
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   tasks: state.userReducer.tasks,
-  receivedTasks: state.userReducer.receivedTasks,
-})
+  receivedTasks: state.userReducer.receivedTasks
+});
 
-export default connect(mapStateToProps, { addTask, deleteTask, deleteReceivedTask })(
-  TasksList
-);
+export default connect(mapStateToProps, {
+  addTask,
+  deleteTask,
+  deleteReceivedTask
+})(TasksList);

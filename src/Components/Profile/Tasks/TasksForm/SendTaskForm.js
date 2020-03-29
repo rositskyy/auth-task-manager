@@ -1,26 +1,19 @@
 import React, { useState } from "react";
 import SelectOption from "./SelectOption";
 import { v4 as uuidv4 } from "uuid";
+import { connect } from "react-redux";
+import { sendTask } from "../../../../store/actions/userAction";
 
-const SendTaskForm = () => {
+const SendTaskForm = ({ sendTask }) => {
+
   const [task, setTask] = useState("");
   const [receiver, setReceiver] = useState("select");
+  
   const onSubmit = e => {
     e.preventDefault();
+    const newTask = { id: uuidv4(), task };
+    sendTask(newTask, receiver);
     alert(`Task have been sent to ${receiver} succesful!`);
-    // All users from localstorage
-    const data = { id: uuidv4(), task };
-    const existing = JSON.parse(localStorage.getItem("accounts"));
-    // Send to user [foundUser]
-    const foundUser = existing.find(item => item.login === receiver);
-    foundUser.receivedTasks.push(data);
-    // Update accounts info
-    const ids = existing.map(e => e.id);
-    const elementIndex = ids.indexOf(foundUser.id);
-    if (elementIndex !== -1) {
-      existing[elementIndex] = foundUser;
-    }
-    localStorage.setItem("accounts", JSON.stringify(existing));
   };
 
   return (
@@ -44,4 +37,4 @@ const SendTaskForm = () => {
   );
 };
 
-export default SendTaskForm;
+export default connect(null, { sendTask })(SendTaskForm);

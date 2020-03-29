@@ -1,56 +1,59 @@
-import React, { PureComponent } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Alert from "./Alert";
 import { connect } from "react-redux";
 import { userRegistration } from "../../store/actions/userAction";
+import { Link } from "react-router-dom";
 
-class Registration extends PureComponent {
-  state = {
-    alertWarn: false
-  };
+const Registration = ({ loginStatus, userRegistration }) => {
 
-  componentWillUnmount() {
-    if (this.timeoutId !== null) {
-      clearTimeout(this.timeoutId);
-    }
-  }
+  const [alertWarn, setAlertWarn] = useState(false);
 
-  timeoutId = null;
+  const [alertSuccesful, setAlertSuccesful] = useState(false);
 
-  onSubmitRegister = ({ login, password }) => {
-    const registerResult = this.props.userRegistration({ login, password });
+  useEffect(() => {
+    let timeout = setTimeout(() => setAlertWarn(false), 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [alertWarn]);
+
+  const onSubmitRegister = ({ login, password }) => {
+    const registerResult = userRegistration({ login, password });
     if (registerResult) {
-      alert("user created succesful");
-      this.props.history.push("/login");
+      setAlertSuccesful(true);
     } else {
-      this.setState({ alertWarn: true });
-      this.timeoutId = setTimeout(() => {
-        this.setState({ alertWarn: false });
-      }, 3000);
+      setAlertWarn(true);
     }
   };
-
-  render() {
-    return (
-      <>
-        <div className="row container">
-          {this.state.alertWarn && (
-            <div className="col s12">
-              <Alert
-                type="alert_warn"
-                text="Username is already exists, try another name"
-              />
-            </div>
-          )}
-          <h5 style={{ textAlign: "center", color: "grey" }}>Registration</h5>
-          <AuthForm onSubmit={this.onSubmitRegister} />
-        </div>
-        {this.props.loginStatus && <Redirect to="/profile" />}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <div className="row container">
+        {alertWarn && (
+          <div className="col s12">
+            <Alert
+              type="alert_warn"
+              text="Username is already exists, try another name"
+            />
+          </div>
+        )}
+        <h5 style={{ textAlign: "center", color: "grey" }}>Registration</h5>
+        <AuthForm onSubmit={onSubmitRegister} />
+        {alertSuccesful && (
+          <div className="col s12 alert_succesful">
+            <Alert
+              text="Account created succesful!"
+            />
+            <Link to="/login" style={{textAlign: 'center'}}>Log In!</Link>
+          </div>
+        )}
+      </div>
+      {loginStatus && <Redirect to="/profile" />}
+  
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   loginStatus: state.userReducer.loginStatus

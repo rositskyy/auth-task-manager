@@ -14,7 +14,8 @@ export const userLogin = ({ login, password }) => dispatch => {
       type: USER_LOGIN,
       payload: user
     });
-  } else return null;
+    return true;
+  } else return false;
 };
 
 export const userLogout = () => dispatch => {
@@ -26,7 +27,10 @@ export const userLogout = () => dispatch => {
 };
 
 export const userRegistration = ({ login, password }) => dispatch => {
-  return API.register({ login, password });
+  const registrationProcess = API.register({ login, password });
+  if(registrationProcess){
+      return true;
+  } else return false
 };
 
 export const restoreSession = () => dispatch => {
@@ -61,4 +65,8 @@ export const deleteReceivedTask = id => dispatch => {
     type: DELETE_RECEIVED_TASK,
     payload: id
   });
+};
+
+export const sendTask = (newTask, receiver) => dispatch => {
+  API.sendTask(newTask, receiver);
 };

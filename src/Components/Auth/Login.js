@@ -1,55 +1,50 @@
-import React, { PureComponent } from "react";
+import React, { useState, useEffect } from "react";
 import { Redirect } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Alert from "./Alert";
 import { connect } from "react-redux";
 import { userLogin } from "../../store/actions/userAction";
 
-class Login extends PureComponent {
-  state = {
-    alertWarn: false
-  };
+const Login = ({ loginStatus, userLogin, history }) => {
+  const [alertWarn, setAlertWarn] = useState(false);
+  useEffect(
+    () => {
+      let timeout = setTimeout(() => setAlertWarn(false), 3000);
+      return () => {
+        clearTimeout(timeout);
+      };
+    },
+    [alertWarn]
+  );
 
-  timeoutId = null;
-
-  componentWillUnmount() {
-    if (this.timeoutId !== null) {
-      clearTimeout(this.timeoutId);
-    }
-  }
-
-  onSubmitLogin = ({ login, password }) => {
-    const loginProcess = this.props.userLogin({ login, password });
+  const onSubmitLogin = ({ login, password }) => {
+    const loginProcess = userLogin({ login, password });
     if (loginProcess) {
-      this.props.history.push("/profile");
+      alert("You have logged succesful");
+      return history.push("/profile");
     } else {
-      this.setState({ alertWarn: true });
-      this.timeoutId = setTimeout(() => {
-        this.setState({ alertWarn: false });
-      }, 3000);
+      setAlertWarn(true);
     }
   };
-  
-  render() {
-    return (
-      <>
-        <div className="row container">
-          {this.state.alertWarn && (
-            <div className="col s12">
-              <Alert
-                type="alert_warn"
-                text="Username or password isn't correct!"
-              />
-            </div>
-          )}
-          <h5 style={{ textAlign: "center", color: "grey" }}>Login</h5>
-          <AuthForm onSubmit={this.onSubmitLogin} />
-        </div>
-        {this.props.loginStatus && <Redirect to="/profile" />}
-      </>
-    );
-  }
-}
+
+  return (
+    <>
+      <div className="row container">
+        {alertWarn && (
+          <div className="col s12">
+            <Alert
+              type="alert_warn"
+              text="Username or password isn't correct!"
+            />
+          </div>
+        )}
+        <h5 style={{ textAlign: "center", color: "grey" }}>Login</h5>
+        <AuthForm onSubmit={onSubmitLogin} />
+      </div>
+      {loginStatus && <Redirect to="/profile" />}
+    </>
+  );
+};
 
 const mapStateToProps = state => ({
   loginStatus: state.userReducer.loginStatus

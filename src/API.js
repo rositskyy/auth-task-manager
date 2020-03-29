@@ -93,6 +93,20 @@ class API {
     }
     localStorage.setItem("accounts", JSON.stringify(accounts));
   }
+
+  static sendTask(newTask, receiver) {
+    const existing = JSON.parse(localStorage.getItem("accounts"));
+    // Send to user [foundUser]
+    const foundUser = existing.find(item => item.login === receiver);
+    foundUser.receivedTasks.push(newTask);
+    // Update accounts info
+    const ids = existing.map(e => e.id);
+    const elementIndex = ids.indexOf(foundUser.id);
+    if (elementIndex !== -1) {
+      existing[elementIndex] = foundUser;
+    }
+    localStorage.setItem("accounts", JSON.stringify(existing));
+  }
 }
 
 export default API;
