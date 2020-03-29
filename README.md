@@ -1,8 +1,8 @@
 The task manager app
-1. You can create unique acconunt, then log in to see your profile!
-2. Profile page consists of your own tasks and received tasks from other users.
+1. You can create a unique account, then log in to see your profile!
+2. The profile page consists of your own tasks and received tasks from other users.
 3. It's possible to add and remove tasks.
-4. You can send task to any user that registered in system already.
+4. You can send tasks to any user registered in the system already.
 5. All routes are protected.
 6. This project I was using plenty of libraries such as React/Redux, Materialize, React-Router, moment.
 
