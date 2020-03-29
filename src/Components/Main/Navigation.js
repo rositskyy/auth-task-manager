@@ -24,12 +24,7 @@ const Navigation = ({ userLogout, loginStatus }) => {
             )}
             {loginStatus ? (
               <li>
-                <Link
-                  to="/profile"
-                  onClick={() => {
-                    return window.confirm("You sure?") ? userLogout() : null;
-                  }}
-                >
+                <Link to="/profile" onClick={userLogout}>
                   Log Out
                 </Link>
               </li>

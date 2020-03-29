@@ -7,15 +7,12 @@ import { userLogin } from "../../store/actions/userAction";
 
 const Login = ({ loginStatus, userLogin, history }) => {
   const [alertWarn, setAlertWarn] = useState(false);
-  useEffect(
-    () => {
-      let timeout = setTimeout(() => setAlertWarn(false), 3000);
-      return () => {
-        clearTimeout(timeout);
-      };
-    },
-    [alertWarn]
-  );
+  useEffect(() => {
+    let timeout = setTimeout(() => setAlertWarn(false), 3000);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [alertWarn]);
 
   const onSubmitLogin = ({ login, password }) => {
     const loginProcess = userLogin({ login, password });

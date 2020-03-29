@@ -18,7 +18,7 @@ const TasksList = ({
   receivedTasks
 }) => {
   const onSubmit = ({ task }) => {
-    const newTask = { id: uuidv4(), task };
+    const newTask = { id: uuidv4(), task, date: new Date() };
     addTask(newTask);
   };
 
@@ -37,6 +37,8 @@ const TasksList = ({
           onDelete={onDeleteReceivedTask}
           label="Received Tasks"
           tasks={receivedTasks}
+          author={receivedTasks.author}
+          date={receivedTasks.date}
         />
         <AddTaskForm onSubmit={onSubmit} />
       </div>

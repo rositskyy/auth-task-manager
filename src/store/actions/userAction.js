@@ -19,18 +19,20 @@ export const userLogin = ({ login, password }) => dispatch => {
 };
 
 export const userLogout = () => dispatch => {
-  localStorage.removeItem("logged");
-  localStorage.removeItem("currentUser");
-  dispatch({
-    type: USER_LOGOUT
-  });
+  if (window.confirm("Want log out?")) {
+    localStorage.removeItem("logged");
+    localStorage.removeItem("currentUser");
+    dispatch({
+      type: USER_LOGOUT
+    });
+  } else return false;
 };
 
 export const userRegistration = ({ login, password }) => dispatch => {
   const registrationProcess = API.register({ login, password });
-  if(registrationProcess){
-      return true;
-  } else return false
+  if (registrationProcess) {
+    return true;
+  } else return false;
 };
 
 export const restoreSession = () => dispatch => {
@@ -51,7 +53,7 @@ export const addTask = newTask => dispatch => {
   });
 };
 
-export const deleteTask = id => dispatch => {
+export const deleteTask = (id) => dispatch => {
   API.deleteTask(id);
   dispatch({
     type: DELETE_TASK,

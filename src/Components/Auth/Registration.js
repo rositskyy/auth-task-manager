@@ -7,7 +7,6 @@ import { userRegistration } from "../../store/actions/userAction";
 import { Link } from "react-router-dom";
 
 const Registration = ({ loginStatus, userRegistration }) => {
-
   const [alertWarn, setAlertWarn] = useState(false);
 
   const [alertSuccesful, setAlertSuccesful] = useState(false);
@@ -42,15 +41,21 @@ const Registration = ({ loginStatus, userRegistration }) => {
         <AuthForm onSubmit={onSubmitRegister} />
         {alertSuccesful && (
           <div className="col s12 alert_succesful">
-            <Alert
-              text="Account created succesful!"
-            />
-            <Link to="/login" style={{textAlign: 'center'}}>Log In!</Link>
+            <Alert text="Account created succesful" />
+            <Link
+              to="/login"
+              style={{
+                textAlign: "center",
+                fontWeight: "400",
+                fontStyle: "italic"
+              }}
+            >
+              Log In!
+            </Link>
           </div>
         )}
       </div>
       {loginStatus && <Redirect to="/profile" />}
-  
     </>
   );
 };

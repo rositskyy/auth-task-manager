@@ -18,16 +18,17 @@ class API {
   }
 
   static restoreSession() {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    if (currentUser) {
-      return currentUser;
+    const isUserSignedIn = JSON.parse(localStorage.getItem("currentUser"));
+    if (isUserSignedIn) {
+      return isUserSignedIn;
     }
     return null;
   }
 
   static register({ login, password }) {
-    const storage = JSON.parse(localStorage.getItem("accounts"));
-    const existUserName = storage && storage.find(item => item.login === login);
+    const accountsPayload = localStorage.getItem("accounts");
+    const accounts = accountsPayload ? JSON.parse(accountsPayload) : [];
+    const existUserName = accounts && accounts.find(item => item.login === login);
     if (existUserName) {
       return false;
     }
@@ -38,8 +39,6 @@ class API {
       tasks: [],
       receivedTasks: []
     };
-    const accountsPayload = localStorage.getItem("accounts");
-    const accounts = accountsPayload ? JSON.parse(accountsPayload) : [];
     accounts.push(newUser);
     localStorage.setItem("accounts", JSON.stringify(accounts));
     return true;
@@ -48,7 +47,7 @@ class API {
   static addTask(newTask) {
     // Saving current user
     const user = JSON.parse(localStorage.getItem("currentUser"));
-    user.tasks.push(newTask);
+    user.tasks.unshift(newTask);
     localStorage.setItem("currentUser", JSON.stringify(user));
 
     // Update tasks in accounts storage
@@ -98,7 +97,7 @@ class API {
     const existing = JSON.parse(localStorage.getItem("accounts"));
     // Send to user [foundUser]
     const foundUser = existing.find(item => item.login === receiver);
-    foundUser.receivedTasks.push(newTask);
+    foundUser.receivedTasks.unshift(newTask);
     // Update accounts info
     const ids = existing.map(e => e.id);
     const elementIndex = ids.indexOf(foundUser.id);

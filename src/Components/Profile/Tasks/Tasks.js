@@ -1,4 +1,5 @@
 import React from "react";
+import moment from "moment";
 
 const Tasks = ({ onDelete, tasks, label }) => {
   return (
@@ -8,7 +9,18 @@ const Tasks = ({ onDelete, tasks, label }) => {
         {tasks &&
           tasks.map(item => (
             <li className="collection-item" key={item.id}>
-              {item.task}
+              {item.task}{" "}
+              {item.author && (
+                <>
+                  <br />
+                  <small>
+                    from{" "}
+                    <span style={{ color: "lightcoral" }}>{item.author}</span>
+                  </small>
+                </>
+              )}
+              <br />
+              <small>{moment(item.date).fromNow()}</small>
               <i
                 onClick={() => onDelete(item.id)}
                 className="material-icons trashcan"
