@@ -2,44 +2,35 @@ import React, { PureComponent } from "react";
 import { Redirect } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Alert from "./Alert";
+import { connect } from "react-redux";
+import { userLogin } from "../../store/actions/userAction";
 
 class Login extends PureComponent {
   state = {
     alertWarn: false
   };
 
+  timeoutId = null;
+
+  componentWillUnmount() {
+    if (this.timeoutId !== null) {
+      clearTimeout(this.timeoutId);
+    }
+  }
+
   onSubmitLogin = ({ login, password }) => {
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
-    const userPayload =
-      usersAccounts &&
-      usersAccounts.find(
-        account => account.login === login && account.password === password
-      );
-
-    if (userPayload) {
-      //Set currentUser object in LocalStorage
-      localStorage.setItem("currentUser", JSON.stringify(userPayload));
-
-      //Set logged status in LocalStorage
-      localStorage.setItem("logged", true);
-
+    const loginProcess = this.props.userLogin({ login, password });
+    if (loginProcess) {
       this.props.history.push("/profile");
-      alert("You have logged succesful");
     } else {
-      //timeout fix
       this.setState({ alertWarn: true });
-      setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         this.setState({ alertWarn: false });
       }, 3000);
     }
   };
-
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
+  
   render() {
-    const isLogged = localStorage.getItem("logged");
     return (
       <>
         <div className="row container">
@@ -54,10 +45,14 @@ class Login extends PureComponent {
           <h5 style={{ textAlign: "center", color: "grey" }}>Login</h5>
           <AuthForm onSubmit={this.onSubmitLogin} />
         </div>
-        {isLogged && <Redirect to="/profile" />}
+        {this.props.loginStatus && <Redirect to="/profile" />}
       </>
     );
   }
 }
 
-export default Login;
+const mapStateToProps = state => ({
+  loginStatus: state.userReducer.loginStatus
+});
+
+export default connect(mapStateToProps, { userLogin })(Login);

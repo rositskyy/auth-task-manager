@@ -1,11 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
-const AddTaskForm = ({ onSubmit, onChange, inputText }) => {
+const AddTaskForm = ({ onSubmit }) => {
+  const [task, setTask] = useState("");
   return (
     <>
-      <form onSubmit={onSubmit} className="col s12">
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          onSubmit({ task });
+          setTask("");
+        }}
+        className="col s12"
+      >
         <div className="input-field col s12">
-          <input onChange={onChange} type="text" value={inputText} />
+          <input
+            onChange={e => setTask(e.target.value)}
+            type="text"
+            value={task}
+            required
+          />
           <label htmlFor="text">Add task</label>
         </div>
         <button type="submit" className="btn">

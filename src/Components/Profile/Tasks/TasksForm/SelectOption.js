@@ -1,19 +1,21 @@
 import React from "react";
+import { connect } from "react-redux";
 
-const SelectOption = ({ handleChange, selectValue }) => {
+const SelectOption = ({ currentUser, setReceiver, receiver }) => {
   const users = JSON.parse(localStorage.getItem("accounts"));
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   const userNames =
     users &&
     users
       .filter(item => item.id !== currentUser.id)
-      .map(item => <option key={item.id}>{item.user}</option>);
+      .map(item => <option key={item.id}>{item.login}</option>);
   return (
     <div>
       <select
         className="browser-default input-field"
-        onChange={handleChange}
-        value={selectValue}
+        onChange={e => {
+          setReceiver(e.target.value);
+        }}
+        value={receiver}
       >
         <option disabled value="select">
           select user
@@ -23,4 +25,8 @@ const SelectOption = ({ handleChange, selectValue }) => {
     </div>
   );
 };
-export default SelectOption;
+const mapStateToProps = state => ({
+  currentUser: state.userReducer.currentUser
+});
+
+export default connect(mapStateToProps, null)(SelectOption);

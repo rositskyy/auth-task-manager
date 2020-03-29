@@ -1,11 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-const Main = () => {
-  const isLogged = localStorage.getItem("logged");
+const Main = ({ loginStatus }) => {
   return (
     <>
-      {isLogged ? (
+      {loginStatus ? (
         <Link to="/profile">
           <h1 style={{ color: "grey", textAlign: "center" }}>
             open task manager
@@ -22,4 +22,8 @@ const Main = () => {
   );
 };
 
-export default Main;
+const mapStateToProps = state => ({
+  loginStatus: state.userReducer.loginStatus
+});
+
+export default connect(mapStateToProps, null)(Main);

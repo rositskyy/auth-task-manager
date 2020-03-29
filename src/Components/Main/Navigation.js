@@ -1,14 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+import { userLogout } from "../../store/actions/userAction";
 
-const Navigation = () => {
-  const isLogged = localStorage.getItem("logged");
-  const logOut = () => {
-    return window.confirm("You sure?")
-      ? (localStorage.removeItem("logged"),
-        localStorage.removeItem("currentUser"))
-      : null;
-  };
+const Navigation = ({ userLogout, loginStatus }) => {
   return (
     <>
       <nav>
@@ -17,19 +12,24 @@ const Navigation = () => {
             task-manager-app
           </Link>
           <ul id="nav-mobile" className="right">
-            {isLogged && (
+            {loginStatus && (
               <li>
                 <Link to="/profile">Profile</Link>{" "}
               </li>
             )}
-            {!isLogged && (
+            {!loginStatus && (
               <li>
                 <Link to="/register">Registration</Link>{" "}
               </li>
             )}
-            {isLogged ? (
+            {loginStatus ? (
               <li>
-                <Link to="/profile" onClick={() => logOut()}>
+                <Link
+                  to="/profile"
+                  onClick={() => {
+                    return window.confirm("You sure?") ? userLogout() : null;
+                  }}
+                >
                   Log Out
                 </Link>
               </li>
@@ -45,4 +45,8 @@ const Navigation = () => {
   );
 };
 
-export default Navigation;
+const mapStateToProps = state => ({
+  loginStatus: state.userReducer.loginStatus
+});
+
+export default connect(mapStateToProps, { userLogout })(Navigation);

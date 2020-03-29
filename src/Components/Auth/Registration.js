@@ -1,8 +1,9 @@
 import React, { PureComponent } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Redirect } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Alert from "./Alert";
+import { connect } from "react-redux";
+import { userRegistration } from "../../store/actions/userAction";
 
 class Registration extends PureComponent {
   state = {
@@ -17,44 +18,20 @@ class Registration extends PureComponent {
 
   timeoutId = null;
 
-  onChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  onSubmitRegister = ({login, password}) => {
-    const newUser = {
-      id: uuidv4(),
-      login,
-      password,
-      tasks: [],
-      receivedTasks: []
-    };
-
-    const storage = JSON.parse(localStorage.getItem("accounts"));
-    const existUserName = storage && storage.find(item => item.login === login);
-    if (existUserName) {
+  onSubmitRegister = ({ login, password }) => {
+    const registerResult = this.props.userRegistration({ login, password });
+    if (registerResult) {
+      alert("user created succesful");
+      this.props.history.push("/login");
+    } else {
       this.setState({ alertWarn: true });
       this.timeoutId = setTimeout(() => {
         this.setState({ alertWarn: false });
-      }, 2000);
-    } else {
-      this.addToLocalStorageArray("accounts", newUser);
-
-      this.setState({ login: "", password: "" });
-      this.props.history.push("/login");
-      alert("Account created succesfull, now you can log in");
+      }, 3000);
     }
   };
 
-  addToLocalStorageArray = (name, value) => {
-    const accountsPayload = localStorage.getItem(name);
-    const accounts = accountsPayload ? JSON.parse(accountsPayload) : [];
-    accounts.push(value);
-    localStorage.setItem(name, JSON.stringify(accounts));
-  };
-
   render() {
-    const isLogged = localStorage.getItem("logged");
     return (
       <>
         <div className="row container">
@@ -67,15 +44,16 @@ class Registration extends PureComponent {
             </div>
           )}
           <h5 style={{ textAlign: "center", color: "grey" }}>Registration</h5>
-          <AuthForm
-            // onChange={this.onChange}
-            onSubmit={this.onSubmitRegister}
-          />
+          <AuthForm onSubmit={this.onSubmitRegister} />
         </div>
-        {isLogged && <Redirect to="/profile" />}
+        {this.props.loginStatus && <Redirect to="/profile" />}
       </>
     );
   }
 }
 
-export default Registration;
+const mapStateToProps = state => ({
+  loginStatus: state.userReducer.loginStatus
+});
+
+export default connect(mapStateToProps, { userRegistration })(Registration);

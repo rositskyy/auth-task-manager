@@ -18,7 +18,6 @@ const Tasks = ({ onDelete, tasks, label }) => {
             </li>
           ))}
       </div>
-      {console.log(tasks)}
     </div>
   );
 };
