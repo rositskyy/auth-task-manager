@@ -1,9 +1,10 @@
-1. The task manager was made with React/Redux & with saving all data in Local Storage.
-2. You can create unique acconunt, then log in to see your profile!
-3. Profile page consists of your own tasks and received tasks from other users.
-4. It's possible to add and remove tasks.
-5. You can send task to any user that registered in system already.
-6. All routes are protected.
+The task manager app
+1. You can create unique acconunt, then log in to see your profile!
+2. Profile page consists of your own tasks and received tasks from other users.
+3. It's possible to add and remove tasks.
+4. You can send task to any user that registered in system already.
+5. All routes are protected.
+6. This project I was using plenty of libraries such as React/Redux, Materialize, React-Router, moment.
 
 Profile view of the app
 
