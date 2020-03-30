@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/auth-task-manager/static/css/main.2fdd5ea2.chunk.css",
-    "main.js": "/auth-task-manager/static/js/main.31a87489.chunk.js",
-    "main.js.map": "/auth-task-manager/static/js/main.31a87489.chunk.js.map",
+    "main.js": "/auth-task-manager/static/js/main.6f3a3282.chunk.js",
+    "main.js.map": "/auth-task-manager/static/js/main.6f3a3282.chunk.js.map",
     "runtime-main.js": "/auth-task-manager/static/js/runtime-main.aaf65ff1.js",
     "runtime-main.js.map": "/auth-task-manager/static/js/runtime-main.aaf65ff1.js.map",
-    "static/js/2.af8e080c.chunk.js": "/auth-task-manager/static/js/2.af8e080c.chunk.js",
-    "static/js/2.af8e080c.chunk.js.map": "/auth-task-manager/static/js/2.af8e080c.chunk.js.map",
+    "static/js/2.7c8ba3f6.chunk.js": "/auth-task-manager/static/js/2.7c8ba3f6.chunk.js",
+    "static/js/2.7c8ba3f6.chunk.js.map": "/auth-task-manager/static/js/2.7c8ba3f6.chunk.js.map",
     "index.html": "/auth-task-manager/index.html",
-    "precache-manifest.25c07da5211c50ebf38ae8221126058f.js": "/auth-task-manager/precache-manifest.25c07da5211c50ebf38ae8221126058f.js",
+    "precache-manifest.0f8328b2907c85edc52691462eabbd12.js": "/auth-task-manager/precache-manifest.0f8328b2907c85edc52691462eabbd12.js",
     "service-worker.js": "/auth-task-manager/service-worker.js",
     "static/css/main.2fdd5ea2.chunk.css.map": "/auth-task-manager/static/css/main.2fdd5ea2.chunk.css.map",
-    "static/js/2.af8e080c.chunk.js.LICENSE.txt": "/auth-task-manager/static/js/2.af8e080c.chunk.js.LICENSE.txt"
+    "static/js/2.7c8ba3f6.chunk.js.LICENSE.txt": "/auth-task-manager/static/js/2.7c8ba3f6.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.aaf65ff1.js",
-    "static/js/2.af8e080c.chunk.js",
+    "static/js/2.7c8ba3f6.chunk.js",
     "static/css/main.2fdd5ea2.chunk.css",
-    "static/js/main.31a87489.chunk.js"
+    "static/js/main.6f3a3282.chunk.js"
   ]
 }
