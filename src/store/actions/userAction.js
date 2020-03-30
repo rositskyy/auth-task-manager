@@ -3,6 +3,7 @@ import {
   USER_LOGOUT,
   ADD_TASK,
   DELETE_TASK,
+  UPDATE_TASK,
   DELETE_RECEIVED_TASK
 } from "./actiontypes";
 import API from "../../API";
@@ -68,6 +69,17 @@ export const deleteReceivedTask = id => dispatch => {
   });
 };
 
-export const sendTask = (task, receiver, author) => dispatch => {
-  API.sendTask(task, receiver, author);
+export const sendTask = (task, receiver) => dispatch => {
+  API.sendTask(task, receiver);
+};
+
+export const updateTask = (id, task) => dispatch => {
+  API.updateTask(id, task);
+  dispatch({
+    type: UPDATE_TASK,
+    payload: {
+      id,
+      task
+    }
+  });
 };

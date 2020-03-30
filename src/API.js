@@ -47,8 +47,13 @@ class API {
 
   static addTask(task) {
     // Saving current user
-    const newTask = { id: uuidv4(), task, date: new Date() };
     const user = JSON.parse(localStorage.getItem("currentUser"));
+    const newTask = {
+      id: uuidv4(),
+      task,
+      date: new Date(),
+      authorId: user.id
+    };
     user.tasks.unshift(newTask);
     localStorage.setItem("currentUser", JSON.stringify(user));
 
@@ -96,14 +101,16 @@ class API {
     localStorage.setItem("accounts", JSON.stringify(accounts));
   }
 
-  static sendTask(task, receiver, author) {
+  static sendTask(task, receiver) {
     const accounts = JSON.parse(localStorage.getItem("accounts"));
+    const author = JSON.parse(localStorage.getItem("currentUser"));
     // Send to user [foundUser]
     const foundUser = accounts.find(item => item.login === receiver);
     const newTask = {
       id: uuidv4(),
       task,
-      author,
+      authorName: author.login,
+      authorId: author.id,
       date: new Date()
     };
     foundUser.receivedTasks.unshift(newTask);
@@ -119,6 +126,28 @@ class API {
   static closeCurrentSession() {
     localStorage.removeItem("logged");
     localStorage.removeItem("currentUser");
+  }
+
+  static updateTask(id, task) {
+    // Update current user
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const tasks = currentUser.tasks;
+    const taskIds = tasks.map(e => e.id);
+
+    const taskElementIndex = taskIds.indexOf(id);
+    if (taskElementIndex !== -1) {
+      tasks[taskElementIndex] = { id, task, date: new Date() };
+    }
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+
+    // Update tasks in accounts storage
+    const accounts = JSON.parse(localStorage.getItem("accounts"));
+    const ids = accounts.map(e => e.id);
+    const elementIndex = ids.indexOf(currentUser.id);
+    if (elementIndex !== -1) {
+      accounts[elementIndex] = currentUser;
+    }
+    localStorage.setItem("accounts", JSON.stringify(accounts));
   }
 }
 

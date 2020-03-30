@@ -22,6 +22,12 @@ li {
   cursor: pointer;
 }
 
+.edit {
+  position: absolute;
+  right: 25px;
+  cursor: pointer;
+}
+
 .alert_warn {
   background-color: lightskyblue;
   border: 1px solid rgb(107, 168, 206);

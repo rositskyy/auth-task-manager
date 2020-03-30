@@ -10,8 +10,7 @@ const SendTaskForm = ({ sendTask, currentUser }) => {
   const onSubmit = e => {
     e.preventDefault();
     if (receiver !== "select") {
-      const author = currentUser.login;
-      sendTask(task, receiver, author);
+      sendTask(task, receiver);
       alert(`Task have been sent to ${receiver} succesful!`);
       setTask("");
     } else {

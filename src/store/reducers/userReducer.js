@@ -3,6 +3,7 @@ import {
   USER_LOGIN,
   ADD_TASK,
   DELETE_TASK,
+  UPDATE_TASK,
   DELETE_RECEIVED_TASK
 } from "../actions/actiontypes";
 
@@ -23,7 +24,6 @@ const userReducer = (state = initialState, action) => {
         tasks: action.payload.tasks,
         receivedTasks: action.payload.receivedTasks
       };
-
     case USER_LOGOUT:
       return initialState;
     case ADD_TASK:
@@ -43,6 +43,18 @@ const userReducer = (state = initialState, action) => {
           item => item.id !== action.payload
         )
       };
+    case UPDATE_TASK: {
+      const tasks = [...state.tasks];
+      const ids = tasks.map(e => e.id);
+      const elementIndex = ids.indexOf(action.payload.id);
+      if (elementIndex !== -1) {
+        tasks[elementIndex] = action.payload;
+      }
+      return {
+        ...state,
+        tasks
+      };
+    }
     default:
       return state;
   }

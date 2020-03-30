@@ -20,13 +20,14 @@ const TasksList = ({
     addTask(task);
   };
 
-  const onDeleteMyTask = (id) => {
-    deleteTask(id)
+  const onDeleteMyTask = id => {
+    deleteTask(id);
   };
 
   const onDeleteReceivedTask = id => {
     deleteReceivedTask(id);
   };
+
   return (
     <>
       <div className="row container">
