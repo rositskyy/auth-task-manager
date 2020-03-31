@@ -22,7 +22,7 @@ li {
   cursor: pointer;
 }
 
-.edit {
+.edit_button {
   position: absolute;
   right: 25px;
   cursor: pointer;

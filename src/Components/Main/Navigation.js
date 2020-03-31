@@ -8,8 +8,8 @@ const Navigation = ({ userLogout, loginStatus }) => {
     <>
       <nav>
         <div className="nav-wrapper">
-          <Link to="/" className="brand-logo center">
-            task-manager-app
+          <Link to="/" className="brand-logo left">
+            task-manager
           </Link>
           <ul id="nav-mobile" className="right">
             {loginStatus && (

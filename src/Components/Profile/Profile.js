@@ -1,7 +1,7 @@
 import React from "react";
-import Tasks from "./Tasks/TasksList";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import TasksList from "./Tasks/TasksList";
 
 const Profile = ({ currentUser, loginStatus }) => {
   return (
@@ -11,7 +11,7 @@ const Profile = ({ currentUser, loginStatus }) => {
           Welcome home{" "}
           <span style={{ color: "lightcoral" }}>{currentUser.login}</span>!
         </h4>
-        <Tasks />
+        <TasksList />
       </div>
       {!loginStatus && <Redirect to="/login" />}
     </>

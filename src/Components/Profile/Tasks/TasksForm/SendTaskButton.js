@@ -2,7 +2,7 @@ import React from "react";
 import Popup from "reactjs-popup";
 import SendTaskForm from "./SendTaskForm";
 
-const PopupButton = () => {
+const SendTaskButton = () => {
   return (
     <div className="container">
       <Popup
@@ -17,4 +17,4 @@ const PopupButton = () => {
   );
 };
 
-export default PopupButton;
+export default SendTaskButton;

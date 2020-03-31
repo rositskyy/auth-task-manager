@@ -19,47 +19,45 @@ const Tasks = ({ onDelete, tasks, label, updateTask }) => {
     <div className="col s6">
       <h5 style={{ textAlign: "center", color: "grey" }}>{label}</h5>
       <div className="collection">
-        {tasks &&
-          tasks.map(user => (
-            <li className="collection-item" key={user.id}>
-              {user.task}{" "}
-              {user.authorName && (
-                <>
-                  <br />
-                  <small>
-                    from{" "}
-                    <span style={{ color: "lightcoral" }}>
-                      {user.authorName}
-                    </span>
-                  </small>
-                </>
-              )}
-              <br />
-              <small>{moment(user.date).fromNow()}</small>
+        {tasks.map(user => (
+          <li className="collection-item" key={user.id}>
+            {user.task}{" "}
+            {user.authorName && (
+              <>
+                <br />
+                <small>
+                  from{" "}
+                  <span style={{ color: "lightcoral" }}>{user.authorName}</span>
+                </small>
+              </>
+            )}
+            <br />
+            <small>{moment(user.date).fromNow()}</small>
+            <i
+              onClick={() => onDelete(user.id)}
+              className="material-icons trashcan"
+            >
+              delete_forever
+            </i>
+            {!user.authorName && (
               <i
-                onClick={() => onDelete(user.id)}
-                className="material-icons trashcan"
+                onClick={() => {
+                  setTaskId(id === null ? user.id : null);
+                }}
+                className="material-icons edit_button"
               >
-                delete_forever
+                edit
               </i>
-              {!user.authorName && (
-                <i
-                  onClick={() => {
-                    setTaskId(id === null ? user.id : null);
-                  }}
-                  className="material-icons edit"
-                >
-                  edit
-                </i>
-              )}
-              {id === user.id && (
-                <form
-                  onSubmit={e => {
-                    e.preventDefault();
-                    setTaskId(null);
-                    onEdit();
-                  }}
-                >
+            )}
+            {id === user.id && (
+              <form
+                onSubmit={e => {
+                  e.preventDefault();
+                  setTaskId(null);
+                  onEdit();
+                }}
+              >
+                <>
                   <input
                     type="text"
                     onChange={e => setTask(e.target.value)}
@@ -71,10 +69,11 @@ const Tasks = ({ onDelete, tasks, label, updateTask }) => {
                   >
                     Confirm changes
                   </button>
-                </form>
-              )}
-            </li>
-          ))}
+                </>
+              </form>
+            )}
+          </li>
+        ))}
       </div>
     </div>
   );

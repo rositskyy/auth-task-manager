@@ -1,7 +1,7 @@
 import React from "react";
 import AddTaskForm from "./TasksForm/AddTaskForm";
 import Tasks from "./Tasks";
-import PopupButton from "./TasksForm/PopupButton";
+import SendTaskButton from "./TasksForm/SendTaskButton";
 import { connect } from "react-redux";
 import {
   addTask,
@@ -36,12 +36,10 @@ const TasksList = ({
           onDelete={onDeleteReceivedTask}
           label="Received Tasks"
           tasks={receivedTasks}
-          author={receivedTasks.author}
-          date={receivedTasks.date}
         />
         <AddTaskForm onSubmit={onSubmit} />
       </div>
-      <PopupButton />
+      <SendTaskButton />
     </>
   );
 };
