@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0408a650d61b8a95881cb541175c8e16",
+    "revision": "3414beba3b0fdf02d2f8811bbbc7c203",
     "url": "/auth-task-manager/index.html"
   },
   {
-    "revision": "657bcaf2feeddf61d227",
-    "url": "/auth-task-manager/static/css/main.2fdd5ea2.chunk.css"
+    "revision": "6c8f38f72fcde63d4f6d",
+    "url": "/auth-task-manager/static/css/main.c25186ec.chunk.css"
   },
   {
     "revision": "90620a9676be3e461671",
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/auth-task-manager/static/js/2.7c8ba3f6.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "657bcaf2feeddf61d227",
-    "url": "/auth-task-manager/static/js/main.6f3a3282.chunk.js"
+    "revision": "6c8f38f72fcde63d4f6d",
+    "url": "/auth-task-manager/static/js/main.f362cc0f.chunk.js"
   },
   {
     "revision": "204fafc71ee3e8435114",
