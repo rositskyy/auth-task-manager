@@ -3,7 +3,7 @@ import SelectOption from "./SelectOption";
 import { connect } from "react-redux";
 import { sendTask } from "../../../../store/actions/userAction";
 
-const SendTaskForm = ({ sendTask, currentUser }) => {
+const SendTaskForm = ({ sendTask }) => {
   const [task, setTask] = useState("");
   const [receiver, setReceiver] = useState("select");
 
@@ -39,8 +39,4 @@ const SendTaskForm = ({ sendTask, currentUser }) => {
   );
 };
 
-const mapStateToProps = state => ({
-  currentUser: state.userReducer.currentUser
-});
-
-export default connect(mapStateToProps, { sendTask })(SendTaskForm);
+export default connect(null, { sendTask })(SendTaskForm);
