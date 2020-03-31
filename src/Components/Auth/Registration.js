@@ -3,33 +3,33 @@ import { Redirect } from "react-router-dom";
 import AuthForm from "./AuthForm";
 import Alert from "./Alert";
 import { connect } from "react-redux";
-import { userRegistration } from "../../store/actions/userAction";
+import { userSignIn } from "../../store/actions/userAction";
 import { Link } from "react-router-dom";
 
-const Registration = ({ loginStatus, userRegistration }) => {
-  const [alertWarn, setAlertWarn] = useState(false);
+const Registration = ({ loginStatus, userSignIn }) => {
+  const [alertSignInFailed, setAlertSignInFailed] = useState(false);
 
-  const [alertSuccesful, setAlertSuccesful] = useState(false);
+  const [alertSignInSuccesful, setAlertSignInSuccesful] = useState(false);
 
   useEffect(() => {
-    let timeout = setTimeout(() => setAlertWarn(false), 3000);
+    let alertWarnTimeout = setTimeout(() => setAlertSignInFailed(false), 3000);
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(alertWarnTimeout);
     };
-  }, [alertWarn]);
+  }, [alertSignInFailed]);
 
   const onSubmitRegister = ({ login, password }) => {
-    const registerResult = userRegistration({ login, password });
+    const registerResult = userSignIn({ login, password });
     if (registerResult) {
-      setAlertSuccesful(true);
+      setAlertSignInSuccesful(true);
     } else {
-      setAlertWarn(true);
+      setAlertSignInFailed(true);
     }
   };
   return (
     <>
       <div className="row container">
-        {alertWarn && (
+        {alertSignInFailed && (
           <div className="col s12">
             <Alert
               type="alert_warn"
@@ -39,7 +39,7 @@ const Registration = ({ loginStatus, userRegistration }) => {
         )}
         <h5 style={{ textAlign: "center", color: "grey" }}>Registration</h5>
         <AuthForm onSubmit={onSubmitRegister} />
-        {alertSuccesful && (
+        {alertSignInSuccesful && (
           <div className="col s12 alert_succesful">
             <Alert text="Account created succesful" />
             <Link
@@ -64,4 +64,4 @@ const mapStateToProps = state => ({
   loginStatus: state.userReducer.loginStatus
 });
 
-export default connect(mapStateToProps, { userRegistration })(Registration);
+export default connect(mapStateToProps, { userSignIn })(Registration);

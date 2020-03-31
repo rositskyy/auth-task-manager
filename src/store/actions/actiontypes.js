@@ -1,6 +1,5 @@
 export const USER_LOGIN = "AUTH/USER_LOGIN";
 export const USER_LOGOUT = "AUTH/USER_LOGOUT";
-export const NEW_USER = "AUTH/NEW_USER";
 export const ADD_TASK = "PROFILE/ADD_TASK";
 export const DELETE_TASK = "PROFILE/DELETE_TASK";
 export const UPDATE_TASK = "PROFILE/UPDATE_TASK";

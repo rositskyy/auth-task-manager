@@ -6,7 +6,7 @@ const SendTaskButton = () => {
   return (
     <div className="container">
       <Popup
-        trigger={<button className="btn popup_button"> Send task</button>}
+        trigger={<button className="btn popup_button">Send task</button>}
         position="right top"
       >
         <div>

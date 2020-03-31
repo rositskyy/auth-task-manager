@@ -1,8 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
+import API from "../../../../API";
 
 const SelectOption = ({ currentUser, setReceiver, receiver }) => {
-  const users = JSON.parse(localStorage.getItem("accounts"));
+  const users = API.getAllAccounts();
   const userNames =
     users &&
     users

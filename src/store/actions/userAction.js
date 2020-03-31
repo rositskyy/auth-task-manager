@@ -8,7 +8,14 @@ import {
 } from "./actiontypes";
 import API from "../../API";
 
-export const userLogin = ({ login, password }) => dispatch => {
+export const userSignIn = ({ login, password }) => dispatch => {
+  const registrationProcess = API.register({ login, password });
+  if (registrationProcess) {
+    return true;
+  } else return false;
+};
+
+export const userLogIn = ({ login, password }) => dispatch => {
   const user = API.login({ login, password });
   if (user) {
     dispatch({
@@ -19,19 +26,12 @@ export const userLogin = ({ login, password }) => dispatch => {
   } else return false;
 };
 
-export const userLogout = () => dispatch => {
+export const userLogOut = () => dispatch => {
   if (window.confirm("Want log out?")) {
     API.closeCurrentSession();
     dispatch({
       type: USER_LOGOUT
     });
-  } else return false;
-};
-
-export const userRegistration = ({ login, password }) => dispatch => {
-  const registrationProcess = API.register({ login, password });
-  if (registrationProcess) {
-    return true;
   } else return false;
 };
 
@@ -69,10 +69,6 @@ export const deleteReceivedTask = id => dispatch => {
   });
 };
 
-export const sendTask = (task, receiver) => dispatch => {
-  API.sendTask(task, receiver);
-};
-
 export const updateTask = (id, task) => dispatch => {
   API.updateTask(id, task);
   dispatch({
@@ -82,4 +78,8 @@ export const updateTask = (id, task) => dispatch => {
       task
     }
   });
+};
+
+export const sendTask = (task, receiver) => dispatch => {
+  API.sendTask(task, receiver);
 };

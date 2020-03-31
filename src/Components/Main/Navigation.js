@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { userLogout } from "../../store/actions/userAction";
+import { userLogOut } from "../../store/actions/userAction";
 
-const Navigation = ({ userLogout, loginStatus }) => {
+const Navigation = ({ userLogOut, loginStatus }) => {
   return (
     <>
       <nav>
@@ -24,8 +24,8 @@ const Navigation = ({ userLogout, loginStatus }) => {
             )}
             {loginStatus ? (
               <li>
-                <Link to="/profile" onClick={userLogout}>
-                  Log Out
+                <Link to="/profile" onClick={userLogOut}>
+                  Logout
                 </Link>
               </li>
             ) : (
@@ -44,4 +44,4 @@ const mapStateToProps = state => ({
   loginStatus: state.userReducer.loginStatus
 });
 
-export default connect(mapStateToProps, { userLogout })(Navigation);
+export default connect(mapStateToProps, { userLogOut })(Navigation);

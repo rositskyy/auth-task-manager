@@ -57,19 +57,17 @@ const Tasks = ({ onDelete, tasks, label, updateTask }) => {
                   onEdit();
                 }}
               >
-                <>
-                  <input
-                    type="text"
-                    onChange={e => setTask(e.target.value)}
-                    defaultValue={user.task}
-                  />
-                  <button
-                    type="submit"
-                    className="waves-effect waves-light btn-small"
-                  >
-                    Confirm changes
-                  </button>
-                </>
+                <input
+                  type="text"
+                  onChange={e => setTask(e.target.value)}
+                  defaultValue={user.task}
+                />
+                <button
+                  type="submit"
+                  className="waves-effect waves-light btn-small"
+                >
+                  Confirm changes
+                </button>
               </form>
             )}
           </li>
