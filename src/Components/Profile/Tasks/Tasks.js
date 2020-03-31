@@ -1,20 +1,11 @@
 import React, { useState } from "react";
 import moment from "moment";
-import { updateTask } from "../../../store/actions/userAction";
-import { connect } from "react-redux";
+import EditForm from "./TasksForm/EditForm";
+import IconButton from "./TasksForm/IconButton";
+import AuthorSignature from "./TasksForm/AuthorSignature";
 
-const Tasks = ({ onDelete, tasks, label, updateTask }) => {
+const Tasks = ({ onDelete, tasks, label }) => {
   const [id, setTaskId] = useState(null);
-  const [task, setTask] = useState("");
-
-  const onEdit = () => {
-    if (task !== "") {
-      updateTask(id, task);
-    } else {
-      return false;
-    }
-  };
-
   return (
     <div className="col s6">
       <h5 style={{ textAlign: "center", color: "grey" }}>{label}</h5>
@@ -22,53 +13,27 @@ const Tasks = ({ onDelete, tasks, label, updateTask }) => {
         {tasks.map(user => (
           <li className="collection-item" key={user.id}>
             {user.task}{" "}
-            {user.authorName && (
-              <>
-                <br />
-                <small>
-                  from{" "}
-                  <span style={{ color: "lightcoral" }}>{user.authorName}</span>
-                </small>
-              </>
-            )}
+            {user.authorName && <AuthorSignature author={user.authorName} />}
             <br />
             <small>{moment(user.date).fromNow()}</small>
-            <i
+            <IconButton
               onClick={() => onDelete(user.id)}
-              className="material-icons trashcan"
-            >
-              delete_forever
-            </i>
+              label="delete_forever"
+              styleClass="trashcan"
+            />
             {!user.authorName && (
-              <i
-                onClick={() => {
-                  setTaskId(id === null ? user.id : null);
-                }}
-                className="material-icons edit_button"
-              >
-                edit
-              </i>
+              <IconButton
+                onClick={() => setTaskId(id === null ? user.id : null)}
+                label="edit"
+                styleClass="edit_button"
+              />
             )}
             {id === user.id && (
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  setTaskId(null);
-                  onEdit();
-                }}
-              >
-                <input
-                  type="text"
-                  onChange={e => setTask(e.target.value)}
-                  defaultValue={user.task}
-                />
-                <button
-                  type="submit"
-                  className="waves-effect waves-light btn-small"
-                >
-                  Confirm changes
-                </button>
-              </form>
+              <EditForm
+                setTaskId={setTaskId}
+                id={user.id}
+                taskInputValue={user.task}
+              />
             )}
           </li>
         ))}
@@ -77,4 +42,4 @@ const Tasks = ({ onDelete, tasks, label, updateTask }) => {
   );
 };
 
-export default connect(null, { updateTask })(Tasks);
+export default Tasks;
