@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
-import database from "./database";
+import storage from "./storage";
 
 class API {
   static register({ login, password }) {
-    const usersAccounts = database.getStorage("accounts") || [];
+    const usersAccounts = storage.get("accounts") || [];
 
     const isUserNameExists = usersAccounts.find(
       account => account.login === login
@@ -19,18 +19,18 @@ class API {
       receivedTasks: []
     };
     usersAccounts.push(newUser);
-    database.setStorage("accounts", usersAccounts);
+    storage.set("accounts", usersAccounts);
     return true;
   }
 
   static login({ login, password }) {
-    const usersAccounts = database.getStorage("accounts") || [];
+    const usersAccounts = storage.get("accounts") || [];
     const userPayload = usersAccounts.find(
       account => account.login === login && account.password === password
     );
     if (userPayload) {
-      database.setStorage("currentUser", userPayload);
-      database.setStorage("logged", true);
+      storage.set("currentUser", userPayload);
+      storage.set("logged", true);
       return userPayload;
     } else {
       return false;
@@ -38,7 +38,7 @@ class API {
   }
 
   static restoreSession() {
-    const isUserSignedIn = database.getStorage("currentUser");
+    const isUserSignedIn = storage.get("currentUser");
     if (isUserSignedIn) {
       return isUserSignedIn;
     }
@@ -47,7 +47,7 @@ class API {
 
   static addTask(task) {
     // Add task to currentUser storage
-    const currentUser = database.getStorage("currentUser");
+    const currentUser = storage.get("currentUser");
     const newTask = {
       id: uuidv4(),
       task,
@@ -55,56 +55,44 @@ class API {
       authorId: currentUser.id
     };
     currentUser.tasks.unshift(newTask);
-    database.setStorage("currentUser", currentUser);
+    storage.set("currentUser", currentUser);
 
     // Add task to accounts storage the user
-    const usersAccounts = database.getStorage("accounts");
-    const ids = usersAccounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      usersAccounts[elementIndex] = currentUser;
-    }
-    database.setStorage("accounts", usersAccounts);
+    const usersAccounts = storage.get("accounts");
+    storage.replaceOldData(usersAccounts, currentUser);
+    storage.set("accounts", usersAccounts);
     return newTask;
   }
 
   static deleteTask(id) {
     // Delete task from currentUser storage
-    const currentUser = database.getStorage("currentUser");
+    const currentUser = storage.get("currentUser");
     currentUser.tasks = currentUser.tasks.filter(item => item.id !== id);
-    database.setStorage("currentUser", currentUser);
+    storage.set("currentUser", currentUser);
 
     // Delete task from accounts storage the user
-    const usersAccounts = database.getStorage("accounts");
-    const ids = usersAccounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      usersAccounts[elementIndex] = currentUser;
-    }
-    database.setStorage("accounts", usersAccounts);
+    const usersAccounts = storage.get("accounts");
+    storage.replaceOldData(usersAccounts, currentUser);
+    storage.set("accounts", usersAccounts);
   }
 
   static deleteReceivedTask(id) {
     // Delete received task from currentUser storage
-    const currentUser = database.getStorage("currentUser");
+    const currentUser = storage.get("currentUser");
     currentUser.receivedTasks = currentUser.receivedTasks.filter(
       item => item.id !== id
     );
-    database.setStorage("currentUser", currentUser);
+    storage.set("currentUser", currentUser);
 
     // Delete received task from accounts storage the user
-    const usersAccounts = database.getStorage("accounts");
-    const ids = usersAccounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      usersAccounts[elementIndex] = currentUser;
-    }
-    database.setStorage("accounts", usersAccounts);
+    const usersAccounts = storage.get("accounts");
+    storage.replaceOldData(usersAccounts, currentUser);
+    storage.set("accounts", usersAccounts);
   }
 
   static updateTask(id, task) {
     // Update the task currentUser storage
-    const currentUser = database.getStorage("currentUser");
+    const currentUser = storage.get("currentUser");
     const tasks = currentUser.tasks;
     const taskIds = tasks.map(e => e.id);
 
@@ -112,21 +100,17 @@ class API {
     if (taskElementIndex !== -1) {
       tasks[taskElementIndex] = { id, task, date: new Date() };
     }
-    database.setStorage("currentUser", currentUser);
+    storage.set("currentUser", currentUser);
 
     // Update the task in accounts storage the user
-    const usersAccounts = database.getStorage("accounts");
-    const ids = usersAccounts.map(e => e.id);
-    const elementIndex = ids.indexOf(currentUser.id);
-    if (elementIndex !== -1) {
-      usersAccounts[elementIndex] = currentUser;
-    }
-    database.setStorage("accounts", usersAccounts);
+    const usersAccounts = storage.get("accounts");
+    storage.replaceOldData(usersAccounts, currentUser);
+    storage.set("accounts", usersAccounts);
   }
 
   static sendTask(task, receiver) {
-    const usersAccounts = database.getStorage("accounts");
-    const author = database.getStorage("currentUser");
+    const usersAccounts = storage.get("accounts");
+    const author = storage.get("currentUser");
 
     const foundUser = usersAccounts.find(account => account.login === receiver);
     const newTask = {
@@ -144,16 +128,16 @@ class API {
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = foundUser;
     }
-    database.setStorage("accounts", usersAccounts);
+    storage.set("accounts", usersAccounts);
   }
 
   static closeCurrentSession() {
-    database.removeItemFromStorage("logged");
-    database.removeItemFromStorage("currentUser");
+    storage.removeItemFromStorage("logged");
+    storage.removeItemFromStorage("currentUser");
   }
 
   static getAllAccounts() {
-    return database.getStorage("accounts");
+    return storage.get("accounts");
   }
 }
 
