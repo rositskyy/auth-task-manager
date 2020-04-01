@@ -8,7 +8,8 @@ The task manager app
 
 Profile view of the app
 
-![PROFILE](https://user-images.githubusercontent.com/55023068/77848956-d9d56a80-71d0-11ea-9411-49bd1ea1e307.png)
+![PROFILE](https://user-images.githubusercontent.com/55023068/78131595-ff0de700-7423-11ea-85fb-6f0a17c5372d.png)
+
 
 ## Available Scripts
 
