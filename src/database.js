@@ -1,4 +1,4 @@
-class FN {
+class database {
   static getStorage(name) {
     return JSON.parse(localStorage.getItem(name));
   }
@@ -10,4 +10,4 @@ class FN {
   }
 }
 
-export default FN;
+export default database;
