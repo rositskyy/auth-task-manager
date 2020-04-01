@@ -1,8 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
+import FN from "./FN";
 
 class API {
   static register({ login, password }) {
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts")) || [];
+    const usersAccounts = FN.getStorage("accounts") || [];
     const isUserNameExists = usersAccounts.find(
       account => account.login === login
     );
@@ -17,18 +18,18 @@ class API {
       receivedTasks: []
     };
     usersAccounts.push(newUser);
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
     return true;
   }
 
   static login({ login, password }) {
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts")) || [];
+    const usersAccounts = FN.getStorage("accounts") || [];
     const userPayload = usersAccounts.find(
       account => account.login === login && account.password === password
     );
     if (userPayload) {
-      localStorage.setItem("currentUser", JSON.stringify(userPayload));
-      localStorage.setItem("logged", true);
+      FN.setStorage("currentUser", userPayload);
+      FN.setStorage("logged", true);
       return userPayload;
     } else {
       return false;
@@ -36,7 +37,7 @@ class API {
   }
 
   static restoreSession() {
-    const isUserSignedIn = JSON.parse(localStorage.getItem("currentUser"));
+    const isUserSignedIn = FN.getStorage("currentUser");
     if (isUserSignedIn) {
       return isUserSignedIn;
     }
@@ -45,7 +46,7 @@ class API {
 
   static addTask(task) {
     // Add task to currentUser storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = FN.getStorage("currentUser");
     const newTask = {
       id: uuidv4(),
       task,
@@ -53,56 +54,56 @@ class API {
       authorId: currentUser.id
     };
     currentUser.tasks.unshift(newTask);
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    FN.setStorage("currentUser", currentUser);
 
     // Add task to accounts storage the user
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
+    const usersAccounts = FN.getStorage("accounts");
     const ids = usersAccounts.map(e => e.id);
     const elementIndex = ids.indexOf(currentUser.id);
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = currentUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
     return newTask;
   }
 
   static deleteTask(id) {
     // Delete task from currentUser storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = FN.getStorage("currentUser");
     currentUser.tasks = currentUser.tasks.filter(item => item.id !== id);
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    FN.setStorage("currentUser", currentUser);
 
     // Delete task from accounts storage the user
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
+    const usersAccounts = FN.getStorage("accounts");
     const ids = usersAccounts.map(e => e.id);
     const elementIndex = ids.indexOf(currentUser.id);
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = currentUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
   }
 
   static deleteReceivedTask(id) {
     // Delete received task from currentUser storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = FN.getStorage("currentUser");
     currentUser.receivedTasks = currentUser.receivedTasks.filter(
       item => item.id !== id
     );
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    FN.setStorage("currentUser", currentUser);
 
     // Delete received task from accounts storage the user
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
+    const usersAccounts = FN.getStorage("accounts");
     const ids = usersAccounts.map(e => e.id);
     const elementIndex = ids.indexOf(currentUser.id);
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = currentUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
   }
 
   static updateTask(id, task) {
     // Update the task currentUser storage
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = FN.getStorage("currentUser");
     const tasks = currentUser.tasks;
     const taskIds = tasks.map(e => e.id);
 
@@ -110,21 +111,21 @@ class API {
     if (taskElementIndex !== -1) {
       tasks[taskElementIndex] = { id, task, date: new Date() };
     }
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    FN.setStorage("currentUser", currentUser);
 
     // Update the task in accounts storage the user
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
+    const usersAccounts = FN.getStorage("accounts");
     const ids = usersAccounts.map(e => e.id);
     const elementIndex = ids.indexOf(currentUser.id);
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = currentUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
   }
 
   static sendTask(task, receiver) {
-    const usersAccounts = JSON.parse(localStorage.getItem("accounts"));
-    const author = JSON.parse(localStorage.getItem("currentUser"));
+    const usersAccounts = FN.getStorage("accounts");
+    const author = FN.getStorage("currentUser");
 
     const foundUser = usersAccounts.find(account => account.login === receiver);
     const newTask = {
@@ -142,16 +143,16 @@ class API {
     if (elementIndex !== -1) {
       usersAccounts[elementIndex] = foundUser;
     }
-    localStorage.setItem("accounts", JSON.stringify(usersAccounts));
+    FN.setStorage("accounts", usersAccounts);
   }
 
   static closeCurrentSession() {
-    localStorage.removeItem("logged");
-    localStorage.removeItem("currentUser");
+    FN.removeItemFromStorage("logged");
+    FN.removeItemFromStorage("currentUser");
   }
 
   static getAllAccounts() {
-    return JSON.parse(localStorage.getItem("accounts"));
+    return FN.getStorage("accounts");
   }
 }
 
